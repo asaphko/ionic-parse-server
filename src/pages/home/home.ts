@@ -25,8 +25,6 @@ export class HomePage {
   isScanning: boolean = false;
   bleConnected: boolean = false;
   currentStateName: string;
-  private bluetoothCharacteristic: string = ENV.bluetoothCharacteristic;
-  private bluetoothService: string = ENV.bluetoothService;
   private deviceName: string = ENV.deviceName;
   private bluetoothSecretKey: string = ENV.bluetoothSecretKey;
   private oneSignalKey: string = ENV.oneSignalKey;

@@ -31,7 +31,6 @@
     "@types/three": "^0.84.33",
     "angular2-moment": "^1.7.0",
     "cordova-browser": "^4.1.0",
-    "cordova-ios": "4.5.4",
     "cordova-plugin-ble-central": "^1.1.4",
     "cordova-plugin-bluetooth-serial": "^0.4.7",
     "cordova-plugin-compat": "^1.2.0",
@@ -74,8 +73,7 @@
       "cordova-plugin-bluetooth-serial": {}
     },
     "platforms": [
-      "browser",
-      "ios"
+      "browser"
     ]
   },
   "cordovaPlugins": [],
