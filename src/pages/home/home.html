@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar color="primary">
-    <ion-title>Home</ion-title>
+    <ion-title>TRACKSi</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="signout()">
         <ion-icon name="log-out"></ion-icon>
@@ -10,35 +10,40 @@
 </ion-header>
 
 <ion-content>
-
-  <ion-list>
-
-    <ion-item-divider color="primary-light">
-      Add Score
-    </ion-item-divider>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-card *ngFor="let peripheral of peripherals">
+    <button ion-button block color="accent" *ngIf="peripheral.state == 0 && !didScan" (click)="onLockSwitchChange(peripheral)">
+      BLE  - Lock {{ peripheral.name || 'TRACKSi' }}!
+    </button>
+    <button ion-button block color="accent" *ngIf="peripheral.state == 1 && !didScan" (click)="onLockSwitchChange(peripheral)">
+      BLE - Unlock {{ peripheral.name || 'TRACKSi' }}
+    </button>
+  </ion-card>
+  <ion-card *ngFor="let configObject of configObjects">
     <ion-item>
-      <ion-input type="text" placeholder="Name" [(ngModel)]="newScore.playerName"></ion-input>
+      <h2>Current state: <b>{{ configObject.currentStateName }}</b></h2>
+      <p>Updated {{ configObject.get('updatedAt') | amCalendar }}</p>
     </ion-item>
-    <ion-item>
-      <ion-input type="text" placeholder="Score" [(ngModel)]="newScore.score"></ion-input>
-    </ion-item>
-    <ion-item no-lines>
-      <button ion-button icon-left color="accent" (click)="postGameScore()"><ion-icon name="checkmark-circle"></ion-icon>Submit</button>
-    </ion-item>
-
-    <ion-item-divider color="primary-light">
-      Current Scores
-    </ion-item-divider>
-    <ion-item *ngFor="let gameScore of gameScores">
-      <h2>{{ gameScore.get('playerName') }}</h2>
-      <p>{{ gameScore.get('score') }}</p>
-    </ion-item>
-
-  </ion-list>
-
-  <ion-infinite-scroll (ionInfinite)="$event.waitFor(listScores())">
-    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
-
+    <ion-card-content *ngIf="configObject.get('lat')">
+      <agm-map [latitude]="configObject.get('lat') || 0" [longitude]="configObject.get('long') || 0" [zoom]="14" [minZoom]="5" [zoomControl]="false" [disableDefaultUI]="true" [streetViewControl]="false" [mapDraggable]="false" [gestureHandling]="cooperative">
+        <agm-marker [latitude]="configObject.get('lat') || 0" [longitude]="configObject.get('long') || 0"></agm-marker>
+      </agm-map>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row align-items-center>
+          <ion-col>
+            <button ion-button icon-right (click)="lock()"><ion-icon name="lock"> Lock</ion-icon></button>
+          </ion-col>
+          <ion-col>
+            <button ion-button icon-right (click)="unlock()"><ion-icon name="unlock"> Unlock</ion-icon></button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

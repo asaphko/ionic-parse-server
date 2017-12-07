@@ -17,15 +17,16 @@ export class ParseProvider {
     console.log('Initiated Parse');
   }
 
-  public getGameScores(offset: number = 0, limit: number = 3): Promise<any> {
+  public getConfigObjects(offset: number = 0, limit: number = 3): Promise<any> {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        const GameScore = Parse.Object.extend('GameScore');
-        let query = new Parse.Query(GameScore);
+        const ConfigObject = Parse.Object.extend('ConfigObject');
+        let query = new Parse.Query(ConfigObject);
         query.skip(offset);
         query.limit(limit);
-        query.find().then((gameScores) => {
-          resolve(gameScores);
+        query.descending("createdAt");
+        query.find().then((configObjects) => {
+          resolve(configObjects);
         }, (error) => {
           reject(error);
         });
@@ -33,20 +34,17 @@ export class ParseProvider {
     });
   }
 
-  public addGameScore(newScore): Promise<any> {
-    const GameScore = Parse.Object.extend('GameScore');
-    
-    let gameScore = new GameScore();
-    gameScore.set('score', parseInt(newScore.score));
-    gameScore.set('playerName', newScore.playerName);
-    gameScore.set('cheatMode', false);
+  public addConfigObject(newConfig): Promise<any> {
+    const ConfigObject = Parse.Object.extend('ConfigObject');
 
-    return gameScore.save(null, {
-      success: function (gameScore) {
-        console.log(gameScore);
-        return gameScore;
+    let configObject = new ConfigObject();
+    configObject.set('state', newConfig.state);
+
+    return configObject.save(null, {
+      success: function (configObject) {
+        return configObject;
       },
-      error: function (gameScore, error) {
+      error: function (configObject, error) {
         console.log(error);
         return error;
       }

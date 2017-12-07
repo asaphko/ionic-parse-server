@@ -14,33 +14,47 @@ import { ParseProvider } from '../providers/parse/parse';
 import { AuthProvider } from '../providers/auth/auth';
 
 // Pages
-import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
+import { HistoryPage } from '../pages/history/history';
 import { TabsPage } from '../pages/tabs/tabs';
 import { SigninPage } from '../pages/signin/signin';
 import { SignupPage } from '../pages/signup/signup';
 
+// Extras
+import { OneSignal } from '@ionic-native/onesignal'
+import { AgmCoreModule } from '@agm/core';
+import { BLE } from '@ionic-native/ble';
+import { MomentModule } from 'angular2-moment';
+
 @NgModule({
   declarations: [
     MyApp,
-    AboutPage,
-    ContactPage,
     HomePage,
+    HistoryPage,
     TabsPage,
     SigninPage,
     SignupPage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp, {
+      backButtonText: 'Go Back',
+      iconMode: 'ios',
+      modalEnter: 'modal-slide-in',
+      modalLeave: 'modal-slide-out',
+      tabsPlacement: 'bottom',
+      pageTransition: 'ios-transition'
+    }),
+    MomentModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyBZlGqWdc7JyK91kkyojLPX3dfSLxo2b98'
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    AboutPage,
-    ContactPage,
     HomePage,
+    HistoryPage,
     TabsPage,
     SigninPage,
     SignupPage
@@ -50,7 +64,9 @@ import { SignupPage } from '../pages/signup/signup';
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     ParseProvider,
-    AuthProvider
+    AuthProvider,
+    OneSignal,
+    BLE
   ]
 })
 export class AppModule { }

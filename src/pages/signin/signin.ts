@@ -23,6 +23,13 @@ export class SigninPage {
     console.log('Initiated Signin');
   }
 
+  ionViewDidEnter() {
+    if (this.authPvdr.authenticated()) {
+      console.log('already authenticated!');
+      this.navCtrl.setRoot(TabsPage);
+    }
+  }
+
   public doSignin() {
     let loader = this.loadCtrl.create({
       content: 'Signing in...'
@@ -30,6 +37,7 @@ export class SigninPage {
     loader.present();
 
     this.authPvdr.signin(this.username, this.password).subscribe((success) => {
+      //console.log(success);
       this.navCtrl.setRoot(TabsPage);
       loader.dismissAll();
     }, (error) => {

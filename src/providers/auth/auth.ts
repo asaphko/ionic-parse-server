@@ -28,6 +28,8 @@ export class AuthProvider {
     return new Observable((observer) => {
       Parse.User.logIn(username, password, {
         success: function (user) {
+          console.log("stoken: " + user.get('sessionToken'));
+          //console.log("token: " + user['sessionToken']);
           observer.next(true);
           observer.complete();
         },
@@ -37,7 +39,7 @@ export class AuthProvider {
 
           userQuery.equalTo('email', username);
           userQuery.first().then(function (success) {
-            var username = success.toJSON().username; 
+            var username = success.toJSON().username;
             Parse.User.logIn(username, password, {
               success: function (user) {
                 observer.next(true);
@@ -52,7 +54,7 @@ export class AuthProvider {
             observer.error(error);
             observer.complete();
           });
-          
+
         }
       });
     });

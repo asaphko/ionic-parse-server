@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>TRACKSi</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="signout()">
+        <ion-icon name="log-out"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="padding">
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-card *ngFor="let configObject of configObjects">
+    <ion-item>
+      <h2>State: <b>{{ configObject.currentStateName }}</b></h2>
+      <p>Updated {{ configObject.get('updatedAt') | amCalendar }}</p>
+    </ion-item>
+    <ion-card-content *ngIf="configObject.get('lat')">
+      <agm-map [latitude]="configObject.get('lat')" [longitude]="configObject.get('long')" [zoom]="16" [minZoom]="5" [disableDefaultUI]="true" [mapDraggable]="false">
+        <agm-marker [latitude]="configObject.get('lat')" [longitude]="configObject.get('long')"></agm-marker>
+      </agm-map>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
